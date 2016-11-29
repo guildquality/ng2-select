@@ -16,10 +16,11 @@ demo-build
 webpack.config.js
 
 #typescript sources
-*.ts
+# Allow TS files since they weren't being installed through GQ fork ZDH 11/29/16
+#*.ts
 *.js.map
-!*.d.ts
-/components/**/*.ts
-!/components/**/*.d.ts
+#!*.d.ts
+#/components/**/*.ts
+#!/components/**/*.d.ts
 
 factories
