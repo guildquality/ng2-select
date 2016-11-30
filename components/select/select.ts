@@ -138,7 +138,7 @@ let styles = `
      <ul *ngIf="optionsOpened && options && options.length > 0 && !firstItemHasChildren"
           class="ui-select-choices dropdown-menu" role="menu">
         <li *ngFor="let o of options" role="menuitem">
-          <div class="ui-select-choices-row"
+          <div class="ui-select-choices-row {{o.itemClass || ''}}"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)">
@@ -156,7 +156,7 @@ let styles = `
           <div class="dropdown-header">{{c.text}}</div>
   
           <div *ngFor="let o of c.children"
-               class="ui-select-choices-row"
+               class="ui-select-choices-row {{o.itemClass || ''}}"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)"
@@ -205,7 +205,7 @@ let styles = `
      <ul *ngIf="optionsOpened && options && options.length > 0 && !firstItemHasChildren"
           class="ui-select-choices dropdown-menu" role="menu">
         <li *ngFor="let o of options" role="menuitem">
-          <div class="ui-select-choices-row"
+          <div class="ui-select-choices-row {{o.itemClass || ''}}"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)">
@@ -223,7 +223,7 @@ let styles = `
           <div class="dropdown-header">{{c.text}}</div>
   
           <div *ngFor="let o of c.children"
-               class="ui-select-choices-row"
+               class="ui-select-choices-row {{o.itemClass || ''}}"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)"
@@ -281,8 +281,8 @@ export class SelectComponent implements OnInit {
 
       this._active = selectedItems.map((item:any) => {
         let data = areItemsStrings
-          ? item
-          : {id: item[this.idField], text: item[this.textField]};
+            ? item
+            : {id: item[this.idField], text: item[this.textField]};
 
         return new SelectItem(data);
       });
@@ -326,14 +326,14 @@ export class SelectComponent implements OnInit {
       return;
     }
     if (isUpMode && (e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 38 ||
-      e.keyCode === 40 || e.keyCode === 13)) {
+        e.keyCode === 40 || e.keyCode === 13)) {
       e.preventDefault();
       return;
     }
     // backspace
     if (!isUpMode && e.keyCode === 8) {
       let el:any = this.element.nativeElement
-        .querySelector('div.ui-select-container > input');
+          .querySelector('div.ui-select-container > input');
       if (!el.value || el.value.length <= 0) {
         if (this.active.length > 0) {
           this.remove(this.active[this.active.length - 1]);
@@ -398,7 +398,7 @@ export class SelectComponent implements OnInit {
 
   public ngOnInit():any {
     this.behavior = (this.firstItemHasChildren) ?
-      new ChildrenBehavior(this) : new GenericBehavior(this);
+        new ChildrenBehavior(this) : new GenericBehavior(this);
   }
 
   public remove(item:SelectItem):void {
@@ -459,14 +459,14 @@ export class SelectComponent implements OnInit {
       return;
     }
     if (event.keyCode === 9 || event.keyCode === 13 ||
-      event.keyCode === 27 || (event.keyCode >= 37 && event.keyCode <= 40)) {
+        event.keyCode === 27 || (event.keyCode >= 37 && event.keyCode <= 40)) {
       event.preventDefault();
       return;
     }
     this.inputMode = true;
     let value = String
-      .fromCharCode(96 <= event.keyCode && event.keyCode <= 105 ? event.keyCode - 48 : event.keyCode)
-      .toLowerCase();
+        .fromCharCode(96 <= event.keyCode && event.keyCode <= 105 ? event.keyCode - 48 : event.keyCode)
+        .toLowerCase();
     this.focusToInput(value);
     this.open();
     let target = event.target || event.srcElement;
@@ -552,9 +552,9 @@ export class Behavior {
     this.optionsMap.clear();
     let startPos = 0;
     this.actor.itemObjects
-      .map((item:SelectItem) => {
-        startPos = item.fillChildrenHash(this.optionsMap, startPos);
-      });
+        .map((item:SelectItem) => {
+          startPos = item.fillChildrenHash(this.optionsMap, startPos);
+        });
   }
 
   public ensureHighlightVisible(optionsMap:Map<string, number> = void 0):void {
@@ -610,24 +610,24 @@ export class GenericBehavior extends Behavior implements OptionsBehavior {
   public prev():void {
     let index = this.actor.options.indexOf(this.actor.activeOption);
     this.actor.activeOption = this.actor
-      .options[index - 1 < 0 ? this.actor.options.length - 1 : index - 1];
+        .options[index - 1 < 0 ? this.actor.options.length - 1 : index - 1];
     super.ensureHighlightVisible();
   }
 
   public next():void {
     let index = this.actor.options.indexOf(this.actor.activeOption);
     this.actor.activeOption = this.actor
-      .options[index + 1 > this.actor.options.length - 1 ? 0 : index + 1];
+        .options[index + 1 > this.actor.options.length - 1 ? 0 : index + 1];
     super.ensureHighlightVisible();
   }
 
   public filter(query:RegExp):void {
     let options = this.actor.itemObjects
-      .filter((option:SelectItem) => {
-        return stripTags(option.text).match(query) &&
-          (this.actor.multiple === false ||
-          (this.actor.multiple === true && this.actor.active.map((item:SelectItem) => item.id).indexOf(option.id) < 0));
-      });
+        .filter((option:SelectItem) => {
+          return stripTags(option.text).match(query) &&
+              (this.actor.multiple === false ||
+              (this.actor.multiple === true && this.actor.active.map((item:SelectItem) => item.id).indexOf(option.id) < 0));
+        });
     this.actor.options = options;
     if (this.actor.options.length > 0) {
       this.actor.activeOption = this.actor.options[0];
@@ -649,24 +649,24 @@ export class ChildrenBehavior extends Behavior implements OptionsBehavior {
 
   public last():void {
     this.actor.activeOption =
-      this.actor
-        .options[this.actor.options.length - 1]
-        .children[this.actor.options[this.actor.options.length - 1].children.length - 1];
+        this.actor
+            .options[this.actor.options.length - 1]
+            .children[this.actor.options[this.actor.options.length - 1].children.length - 1];
     this.fillOptionsMap();
     this.ensureHighlightVisible(this.optionsMap);
   }
 
   public prev():void {
     let indexParent = this.actor.options
-      .findIndex((option:SelectItem) => this.actor.activeOption.parent && this.actor.activeOption.parent.id === option.id);
+        .findIndex((option:SelectItem) => this.actor.activeOption.parent && this.actor.activeOption.parent.id === option.id);
     let index = this.actor.options[indexParent].children
-      .findIndex((option:SelectItem) => this.actor.activeOption && this.actor.activeOption.id === option.id);
+        .findIndex((option:SelectItem) => this.actor.activeOption && this.actor.activeOption.id === option.id);
     this.actor.activeOption = this.actor.options[indexParent].children[index - 1];
     if (!this.actor.activeOption) {
       if (this.actor.options[indexParent - 1]) {
         this.actor.activeOption = this.actor
-          .options[indexParent - 1]
-          .children[this.actor.options[indexParent - 1].children.length - 1];
+            .options[indexParent - 1]
+            .children[this.actor.options[indexParent - 1].children.length - 1];
       }
     }
     if (!this.actor.activeOption) {
@@ -678,9 +678,9 @@ export class ChildrenBehavior extends Behavior implements OptionsBehavior {
 
   public next():void {
     let indexParent = this.actor.options
-      .findIndex((option:SelectItem) => this.actor.activeOption.parent && this.actor.activeOption.parent.id === option.id);
+        .findIndex((option:SelectItem) => this.actor.activeOption.parent && this.actor.activeOption.parent.id === option.id);
     let index = this.actor.options[indexParent].children
-      .findIndex((option:SelectItem) => this.actor.activeOption && this.actor.activeOption.id === option.id);
+        .findIndex((option:SelectItem) => this.actor.activeOption && this.actor.activeOption.id === option.id);
     this.actor.activeOption = this.actor.options[indexParent].children[index + 1];
     if (!this.actor.activeOption) {
       if (this.actor.options[indexParent + 1]) {

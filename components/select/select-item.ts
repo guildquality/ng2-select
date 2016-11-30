@@ -1,16 +1,20 @@
 export class SelectItem {
   public id:string;
   public text:string;
+  public itemClass:string;
   public children:Array<SelectItem>;
   public parent:SelectItem;
 
   public constructor(source:any) {
     if (typeof source === 'string') {
       this.id = this.text = source;
+      this.itemClass = '';
     }
     if (typeof source === 'object') {
       this.id = source.id || source.text;
       this.text = source.text;
+      this.itemClass = source.itemClass || '';
+
       if (source.children && source.text) {
         this.children = source.children.map((c:any) => {
           let r:SelectItem = new SelectItem(c);
