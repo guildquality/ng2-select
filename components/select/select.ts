@@ -504,8 +504,9 @@ export class SelectComponent implements OnInit {
 
     private open():void {
         this.options = this.itemObjects
-            .filter((option:SelectItem) => (this.multiple === false ||
-            this.multiple === true && !this.active.find((o:SelectItem) => option.text === o.text)));
+        ; // Include all multiple select items, confusing since we have parent tags as selectable and work as headings
+        //.filter((option:SelectItem) => (this.multiple === false ||
+        //this.multiple === true && !this.active.find((o:SelectItem) => option.text === o.text)));
 
         if (this.options.length > 0) {
             this.behavior.first();
@@ -530,6 +531,15 @@ export class SelectComponent implements OnInit {
         if (this.options.length <= 0) {
             return;
         }
+
+        // Prevent duplicate items. Added by GQ. We are allowing selected elements to show in select
+        if (this.multiple === true && this.active.filter(x => x.id == value.id).length > 0) {
+            // complete actions that seemed to be needed in this method
+            this.hideOptions();
+            this.focusToInput('');
+            return;
+        }
+
         if (this.multiple === true) {
             this.active.push(value);
             this.data.next(this.active);
