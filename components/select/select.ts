@@ -205,7 +205,9 @@ let styles = `
            class="form-control ui-select-search"
            placeholder="{{active.length <= 0 || persistMultiplePlaceholder ? placeholder : ''}}"
            role="combobox">
-     <i class="caret" *ngIf="!inputMode && (active.length <= 0 || persistMultiplePlaceholder)">&#x25BC;</i> 
+     <i class="caret" 
+        *ngIf="!optionsOpened && (active.length <= 0 || persistMultiplePlaceholder)"
+        (click)="matchClick($event)">&#x25BC;</i> 
      <!-- options template -->
      <ul *ngIf="optionsOpened && options && options.length > 0 && !firstItemHasChildren"
           class="ui-select-choices dropdown-menu" role="menu">
