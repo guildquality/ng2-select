@@ -18,6 +18,8 @@ webpack.config.js
 #typescript sources
 # Allow TS files since they weren't being installed through GQ fork ZDH 11/29/16
 #*.ts
+# Ignore spec file as it doesn't compile
+*.spec.ts
 *.js.map
 #!*.d.ts
 #/components/**/*.ts
